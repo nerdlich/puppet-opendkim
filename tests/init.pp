@@ -11,5 +11,5 @@
 #
 
 class { 'opendkim':
-    domain => 'example.com',
+    domain        => 'example.com',
 }

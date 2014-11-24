@@ -44,7 +44,7 @@ class opendkim (
     $internal_hosts = '/etc/postfix/mynetworks',
     $mode = 'sv',
     $oversign_headers = [ 'From' ],
-    $selector_prefix = 'mail',
+    $selector_name = 'mail',
     $socket = 'inet:12345@localhost',
 ) inherits opendkim::params {
 
