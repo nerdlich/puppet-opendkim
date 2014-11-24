@@ -1,0 +1,11 @@
+#!/bin/sh
+#
+# dkim-maintenance
+#
+# provided by puppet module puppet-opendkim
+# [url]
+#
+# Automatically generates keys and takes care of key rollover
+
+KEYDIR="/etc/opendkim/$(hostname)"
+
