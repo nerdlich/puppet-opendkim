@@ -175,7 +175,7 @@ Canonicalization  <%= @canonicalization %>
 ##  Specify for which domain(s) signing should be done.  No default; must
 ##  be specified for signing.
 
-Domain          <%= @domain %>
+Domain          <%= @domains.join(',') %>
 
 ##  DomainKeysCompat { yes | no }
 ##      default "no"
@@ -250,7 +250,7 @@ InternalHosts     <%= @internal_hosts %>
 ##  SigningTable and KeyTable are used.  No default; must be specified for
 ##  signing if SigningTable/KeyTable are not in use.
 
-KeyFile         /etc/opendkim/<%= @hostname %>/<%= @selector %>.private
+KeyFile         /etc/opendkim/<%= @service_identifier %>/<%= @selector %>.private
 
 ##  KeyTable dataset
 ##      default (none)
@@ -746,7 +746,7 @@ Syslog          Yes
 ##
 ##  Log success activity to syslog?
 
-# SyslogSuccess     No
+SyslogSuccess     Yes
 
 ##  TemporaryDirectory path
 ##      default /tmp

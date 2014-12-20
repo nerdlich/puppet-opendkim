@@ -1,8 +1,8 @@
 {
-  "name": "puppet-opendkim",
-  "version": "0.1.0",
+  "name": "nerdlich-opendkim",
+  "version": "0.9.0",
   "author": "nerdlich",
-  "summary": "Install and configure OpenDKIM",
+  "summary": "OpenDKIM Puppet module",
   "license": "Apache 2.0",
   "source": "",
   "project_page": null,

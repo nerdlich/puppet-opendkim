@@ -1,0 +1,45 @@
+#!/bin/sh
+
+BASEDIR="/etc/opendkim"
+IDENTIFIER=$(grep -E '^KeyFile' /etc/opendkim.conf | perl -ne '/\/etc\/opendkim\/(.+)\//; print $1')
+KEYDIR="${BASEDIR}/${IDENTIFIER}"
+
+SELECTOR=$(grep -E '^Selector' /etc/opendkim.conf |awk '{print $2}'|cut -d'_' -f1)
+DOMAINS=$(grep -E '^Domain' /etc/opendkim.conf|awk '{print $2}'|sed 's/,/ /g')
+
+TIMESTAMP_0=$(date --date="+1 month" +%Y%m)
+TIMESTAMP_1=$(date +%Y%m)
+TIMESTAMP_2=$(date --date="-1 month" +%Y%m)
+TIMESTAMP_3=$(date --date="-2 month" +%Y%m)
+
+all_keys=''
+
+for timestamp in $TIMESTAMP_0 $TIMESTAMP_1 $TIMESTAMP_2 $TIMESTAMP_3; do
+    key_name="${SELECTOR}_${timestamp}"
+    privkey_file="${KEYDIR}/${SELECTOR}_${timestamp}.private"
+    pubkey_file="${KEYDIR}/${SELECTOR}_${timestamp}.txt"
+
+    if [ -f $pubkey_file ]; then  # publish facts on genkey node only, pubkey is not subscribed on "slaves"
+        GENKEY_NODE=true
+        [ "$all_keys" = "" ] && all_keys=$key_name || all_keys="${all_keys} ${key_name}"
+        priv_key=$(cat $privkey_file|base64 -w0)
+        txt_record=$(awk '{printf "%s ", $0}' $pubkey_file)
+        txt_record=$(echo $txt_record|perl -ne '/.+ IN TXT \( "(.+)"\s"(.+)" \).*/; print "$1$2\n";'|base64 -w0)
+
+        echo "dkim_key_${IDENTIFIER}_${key_name}_priv=$priv_key"
+        echo "dkim_key_${IDENTIFIER}_${key_name}_txt=$txt_record"
+    else
+        GENKEY_NODE=false
+    fi
+done
+
+if $GENKEY_NODE; then
+    for key in $all_keys; do
+        for domain in $DOMAINS; do
+            DOMAINSKEYS="${key},${domain}:${DOMAINSKEYS}"
+        done
+    done
+    echo "dkim_domains_keys_${IDENTIFIER}=${DOMAINSKEYS}"
+else
+    echo "dkim_domains_keys_${IDENTIFIER}=0"
+fi

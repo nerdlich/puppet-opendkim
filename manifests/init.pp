@@ -36,16 +36,18 @@
 # Copyright 2014 Your name here, unless otherwise noted.
 #
 class opendkim (
+    $genkey_node,
+    $service_identifier,
     $add_all_signature_results = 'no',
     $always_add_ar_header = 'yes',
     $authserv_id = $::hostname,
     $canonicalization = 'relaxed/relaxed',
-    $domain,
+    $domains = [],
     $internal_hosts = '/etc/postfix/mynetworks',
     $mode = 'sv',
     $oversign_headers = [ 'From' ],
     $selector_name = 'mail',
-    $socket = 'inet:12345@localhost',
+    $socket = 'inet:12331@localhost',
 ) inherits opendkim::params {
 
     class {'opendkim::install': } ->
