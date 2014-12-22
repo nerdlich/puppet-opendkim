@@ -1,4 +1,4 @@
-# opendkim
+# puppet-opendkim
 
 #### Table of Contents
 
@@ -29,7 +29,7 @@ DNS server managed by Puppet.
 
 ## Setup
 
-### What opendkim affects
+### What puppet-opendkim affects
 
 * Installation of package opendkim
 * Configuration (/etc/opendkim.conf)
