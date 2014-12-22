@@ -49,7 +49,7 @@ Just include the class and specify mandatory parameters:
 * service_identifier: a name for your cluster (even if there is only
   one node)
 * genkey_node: hostname of the 'master' node where keys are generated
-  (even if there is only on node)
+  (even if there is only one node)
 * internal_hosts: array of IPs/networks that are internal and whose
   mail will be signed (or name of a file containing a list of this,
   alternatively)
