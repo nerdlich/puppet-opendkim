@@ -175,7 +175,7 @@ Canonicalization  <%= @canonicalization %>
 ##  Specify for which domain(s) signing should be done.  No default; must
 ##  be specified for signing.
 
-Domain          <%= @domains.join(',') %>
+Domain          <%= @dom.join(',') %>
 
 ##  DomainKeysCompat { yes | no }
 ##      default "no"
@@ -232,7 +232,7 @@ Domain          <%= @domains.join(',') %>
 ##  hosts from which mail should be signed rather than verified.
 ##  Automatically contains 127.0.0.1.
 
-InternalHosts     <%= @internal_hosts %>
+InternalHosts     <%= @inthosts.join(',') %>
 
 ##  KeepTemporaryFiles { yes | no }
 ##      default "no"
