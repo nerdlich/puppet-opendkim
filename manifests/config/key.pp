@@ -6,7 +6,7 @@ define opendkim::config::key(
 ) {
 
     exec { "generate-dkim-key-${key_name}":
-        command => "opendkim-genkey -r -h rsa-sha256 -D /etc/opendkim/${service_identifier} -s ${key_name} && chmod 0600 /etc/opendkim/${service_identifier}/* && chown ${user}:${group} /etc/opendkim/${service_identifier}/*",
+        command => "opendkim-genkey -r -b 1024 -D /etc/opendkim/${service_identifier} -s ${key_name} && chmod 0600 /etc/opendkim/${service_identifier}/* && chown ${user}:${group} /etc/opendkim/${service_identifier}/*",
         creates => "/etc/opendkim/${service_identifier}/${key_name}.private",
         path    => ['/usr/bin', '/usr/sbin', '/bin'],
     }

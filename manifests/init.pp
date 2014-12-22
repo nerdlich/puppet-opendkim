@@ -1,6 +1,6 @@
 # == Class: opendkim
 #
-# Full description of class opendkim here.
+# Puppet module to manage OpenDKIM.
 #
 # === Parameters
 #
