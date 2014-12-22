@@ -15,65 +15,73 @@
 
 ## Overview
 
-A one-maybe-two sentence summary of what the module does/what problem it solves.
-This is your 30 second elevator pitch for your module. Consider including
-OS/Puppet version it works with.
+A Puppet module to manage OpenDKIM. Support for multiple mail cluster
+nodes, automatic key rotation and DNS records. Currently limited to the
+Debian/Ubuntu world.
 
 ## Module Description
 
-If applicable, this section should have a brief description of the technology
-the module integrates with and what that integration enables. This section
-should answer the questions: "What does this module *do*?" and "Why would I use
-it?"
-
-If your module has a range of functionality (installation, configuration,
-management, etc.) this is the time to mention it.
+This module takes care of installing and configuring OpenDKIM as well as
+creating signing keys and synchronizing them to mail cluster neighbours.
+Keys are automatically rotated as recommended by MAAWG [^1] and the
+public key parts are exported and can be automagically configured on a
+DNS server managed by Puppet.
 
 ## Setup
 
 ### What opendkim affects
 
-* A list of files, packages, services, or operations that the module will alter,
-  impact, or execute on the system it's installed on.
-* This is a great place to stick any warnings.
-* Can be in list or paragraph form.
+* Installation of package opendkim
+* Configuration (/etc/opendkim.conf)
+* Key management in /etc/opendkim/${service_identifier}
+* Keys are stored in facts in /etc/facter/facts.d/dkim_keys_${service_identifier}.txt
 
-### Setup Requirements **OPTIONAL**
+### Setup Requirements
 
-If your module requires anything extra before setting up (pluginsync enabled,
-etc.), mention it here.
+* pluginsync
+* stored configs
+* facter >2.0.3
 
 ### Beginning with opendkim
 
-The very basic steps needed for a user to get the module up and running.
-
-If your most recent release breaks compatibility or requires particular steps
-for upgrading, you may wish to include an additional section here: Upgrading
-(For an example, see http://forge.puppetlabs.com/puppetlabs/firewall).
+Just include the class and specify mandatory parameters:
+* domains: array of domains which should be signed
+* service_identifier: a name for your cluster (even if there is only
+  one node)
+* genkey_node: hostname of the 'master' node where keys are generated
+  (even if there is only on node)
+* internal_hosts: array of IPs/networks that are internal and whose
+  mail will be signed (or name of a file containing a list of this,
+  alternatively)
 
 ## Usage
 
-Put the classes, types, and resources for customizing, configuring, and doing
-the fancy stuff with your module here.
+To verify incoming mail and sign outgoing from private networks and
+for domains example.com and example.org:
 
-## Reference
+    class { 'opendkim':
+        service_identifier => 'example_mail_gateway',
+        genkey_node        => 'example_hostname',
+        mode               => 'sv',
+        domains            => ['example.com', 'example.org'],
+        internal_hosts     => ['192.168.0.0/16','10.0.0.0/8'],
+    }
 
-Here, list the classes, types, providers, facts, etc contained in your module.
-This section should include all of the under-the-hood workings of your module so
-people know what the module is touching on their system but don't need to mess
-with things. (We are working on automating this section!)
+To import public key information as fact on a DNS node:
+
+    class { 'opendkim::config::dns':
+        service_identifier => 'example_mail_gateway',
+    }
 
 ## Limitations
 
-This is where you list OS compatibility, version compatibility, etc.
+Currently limited to Debian/Ubuntu.
 
 ## Development
 
-Since your module is awesome, other users will want to play with it. Let them
-know what the ground rules for contributing are.
+Please create pull requests if you would like to contribute.
 
-## Release Notes/Contributors/Etc **Optional**
+## Contributors
 
-If you aren't using changelog, put your release notes here (though you should
-consider using changelog). You may also add any additional sections you feel are
-necessary or important to include here. Please use the `## ` header.
+
+[^1]: https://www.maawg.org/sites/maawg/files/news/M3AAWG_Key_Implementation_BP-2012-11.pdf

@@ -4,36 +4,41 @@
 #
 # === Parameters
 #
-# Document parameters here.
+# [*genkey_node*]
+#   Hostname of the cluster node where keys are created.
 #
-# [*sample_parameter*]
-#   Explanation of what this parameter affects and what it defaults to.
-#   e.g. "Specify one or more upstream ntp servers as an array."
+# [*service_identifier*]
+#   Service or cluster name, e.g. customer name
 #
-# === Variables
+# [*domains*]
+#   Array of domains whose mail should be signed
 #
-# Here you should define a list of variables that this module would require.
+# [*internal_hosts*]
+#   Array of internal IPs/networks whose mail should be signed
 #
-# [*sample_variable*]
-#   Explanation of how this variable affects the funtion of this class and if
-#   it has a default. e.g. "The parameter enc_ntp_servers must be set by the
-#   External Node Classifier as a comma separated list of hostnames." (Note,
-#   global variables should be avoided in favor of class parameters as
-#   of Puppet 2.6.)
+# [*add_all_signature_results*]
+#   Report results for all signatures found in a Authentication-Results header field
 #
-# === Examples
+# [*always_add_ar_header*]
+#   Always add Authentication-Results header field
 #
-#  class { 'opendkim':
-#    servers => [ 'pool.ntp.org', 'ntp.local.company.com' ],
-#  }
+# [*authserv_id*]
+#   Sets the authserv-id in Authentication-Results
 #
-# === Authors
+# [*canonicalization*]
+#   Selects the canonicalization method(s) to be used when signing messages (Header/Body)
 #
-# Author Name <author@domain.com>
+# [*mode*]
+#   Sets operating modes: (s)ign, (v)verify
 #
-# === Copyright
+# [*oversign_headers*]
+#   Array of header fields to be signed twice to prevent from faking a second one
 #
-# Copyright 2014 Your name here, unless otherwise noted.
+# [*selector_name*]
+#   The selector name for each key - '_YYYYMM' will be appended
+#
+# [*socket*]
+#   The socket address where the milter will listen
 #
 class opendkim (
     $genkey_node,
